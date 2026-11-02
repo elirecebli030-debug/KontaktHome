@@ -1,5 +1,12 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/Rauf003/kontakthome.com/
-    - /bin/cp -R * $DEPLOYPATH
+    - export DEPLOYPATH=/home/lmmzuqulc/kontakthome.com/
+    - /bin/cp -R azericard $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
+    - /bin/cp -R images $DEPLOYPATH
+    - /bin/cp -R fonts $DEPLOYPATH
+    - /bin/cp -R faq $DEPLOYPATH
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp checkout.html $DEPLOYPATH
