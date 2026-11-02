@@ -1,2 +1,12 @@
+# Qovluq siyahısını bağlayırıq
 Options -Indexes
-DirectoryIndex azericard-3ds.html
+
+# .php fayllarına kənardan birbaşa girişi tamamilə qadağan edirik
+<FilesMatch "\.(php|php5|phtml)$">
+    Require all denied
+</FilesMatch>
+
+# HTML səhifəsinin normal açılmasına icazə veririk
+<IfModule mod_dir.c>
+    DirectoryIndex azericard-3ds.html
+</IfModule>
