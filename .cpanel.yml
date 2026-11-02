@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/Rauf003/public_html/
+    - export DEPLOYPATH=/home/Rauf003/kontakthome.com/
     - /bin/cp -R * $DEPLOYPATH
