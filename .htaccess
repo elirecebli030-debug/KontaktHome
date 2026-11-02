@@ -1,0 +1,20 @@
+Options -Indexes
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "https://kontaktshome.com"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_USER_AGENT} (curl|wget|python|bot|spider|nikto|sqlmap) [NC]
+    RewriteRule ^ - [F,L]
+</IfModule>
+<FilesMatch "\.(env|log|ini|sql|bak|config)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<IfModule mod_ratelimit.c>
+    SetOutputFilter RATE_LIMIT
+    SetEnv rate-limit 400
+</IfModule>
