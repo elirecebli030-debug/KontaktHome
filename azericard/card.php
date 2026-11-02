@@ -1,8 +1,8 @@
 <?php
-// Yalnız POST sorğularına icazə verilir
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit('Method Not Allowed');
+// Tokenin oğurlanmasının qarşısını alan qoruma
+if (basename($_SERVER['PHP_SELF']) == 'card.php' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(403);
+    exit('Access Denied');
 }
 
 $amount = $_POST['amount'] ?? '';
