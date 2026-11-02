@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit('Method Not Allowed'); }
+
 if (!isset($_SERVER['HTTP_ORIGIN']) || $_SERVER['HTTP_ORIGIN'] !== 'https://kontaktshome.com') { http_response_code(403); exit('Forbidden'); }
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if (empty($userAgent) || preg_match('/curl|wget|python|bot|spider/i', $userAgent)) { http_response_code(403); exit('Bot detected'); }
