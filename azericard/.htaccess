@@ -1,2 +1,9 @@
-Options +Indexes
-DirectoryIndex azericard-3ds.html index.html 3ds.html
+# Qovluq siyahısını bağlayırıq (Index of olmasın)
+Options -Indexes
+
+# .php fayllarına birbaşa brauzerdən girişi qadağan edirik (Source və Token qorunması)
+<FilesMatch "\.(php|php5|phtml)$">
+    Require all denied
+</FilesMatch>
+
+# JS fayllarına və CSS-ə toxunmuruq, onlar rahat yüklənsin
