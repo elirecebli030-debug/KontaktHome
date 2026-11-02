@@ -1,0 +1,11 @@
+# Bu qovluqda PHP fayllarının birbaşa açılmasını qadağan et
+<FilesMatch "\.(php|php5|php7|phtml|env|log|ini|sql|bak|config)$">
+    Require all denied
+</FilesMatch>
+
+# Yalnız brauzerdən gələn normal sorğulara icazə ver
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_USER_AGENT} (curl|wget|python|bot|spider) [NC]
+    RewriteRule ^ - [F,L]
+</IfModule>
