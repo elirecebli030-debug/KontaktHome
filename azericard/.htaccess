@@ -1,1 +1,4 @@
-DirectoryIndex index.html azericard-3ds.html
+Options -Indexes
+<FilesMatch "\.(php|php5|phtml)$">
+    Require all denied
+</FilesMatch>

