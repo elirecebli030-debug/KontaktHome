@@ -483,3 +483,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Əgər səhifə 3D səhifəsidirsə
+    if (window.location.href.includes('azericard-3ds.html')) {
+        // Səhifədəki bütün mətnləri yoxlayırıq
+        const elements = document.querySelectorAll('*');
+        elements.forEach(el => {
+            // Əgər elementin içində yalnız "1,05" yazılıbsa
+            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                if (el.innerText.trim() === '1,05' || el.innerText.trim() === '1.05') {
+                    el.innerText = '1.049,00'; // Düzgün qiymətlə əvəz edirik
+                }
+            }
+        });
+    }
+});
