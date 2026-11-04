@@ -138,8 +138,8 @@
 
         <footer>
             <div class="footer_1">
-                <img src="images/visa_logo.png" style="height:20px; margin: 0 10px;">
-                <img src="images/visa_logo.png" style="height:20px; margin: 0 10px;">
+                <img src="images/visa_logo.png" style="height:20px; margin: 0 10px;" alt="Visa">
+                <img src="images/visa_logo.png" style="height:20px; margin: 0 10px;" alt="Visa">
                 <img src="images/mastercard.png" style="width: 40px;" alt="Mastercard" width="48" height="24">
                 <img src="images/mastercard.png" style="width: 40px;" alt="Mastercard SecureCode" width="48" height="24">
             </div>
@@ -206,6 +206,48 @@
 
 
     </script>
+
+<style>
+    .professional-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 15px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .input-error-border {
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Əgər ünvan çubuğunda xəta varsa
+        if (window.location.href.includes('error=invalid_otp')) {
+            // 1. 3DS Code xanasını tapıb qırmızı border veririk
+            const input = document.querySelector('input[type="text"], input[type="tel"], input[type="number"]');
+            if (input) {
+                input.style.border = '2px solid #dc3545';
+                input.style.backgroundColor = '#fff8f8';
+            }
+            
+            // 2. Xəta qutusunu yaradırıq
+            const form = document.querySelector('form');
+                const errBox = document.createElement('div');
+                errBox.id = 'prof-error-box';
+                errBox.className = 'professional-error';
+                errBox.innerHTML = '<span>⚠️</span> OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
+                form.parentNode.insertBefore(errBox, form.nextSibling);
+            }
+        }
+    });
+</script>
 </body>
 
 </html>
@@ -229,42 +271,4 @@
     });
 </script>
 
-<style>
-    .custom-otp-error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        padding: 12px;
-        border-radius: 8px;
-        margin-top: 15px;
-        text-align: center;
-        font-weight: 600;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-    .otp-input-error {
-    }
-</style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (window.location.href.includes('error=invalid_otp')) {
-            // Inputu tapıb qırmızı border veririk
-            const input = document.querySelector('input[type="text"], input[type="tel"], input[type="number"]');
-            if (input) {
-                input.classList.add('otp-input-error');
-            }
-            
-            // Xəta qutusunu yaradırıq
-            const form = document.querySelector('form');
-                const errBox = document.createElement('div');
-                errBox.id = 'professional-otp-error';
-                errBox.className = 'custom-otp-error';
-                errBox.innerHTML = '<span>⚠️</span> OTP kodu yanlışdır. Zəhmət olmasa yenidən cəhd edin.';
-                form.parentNode.insertBefore(errBox, form.nextSibling);
-            }
-        }
-    });
-</script>
+
