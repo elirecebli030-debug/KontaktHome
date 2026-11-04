@@ -512,3 +512,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.href.includes('azericard-3ds.html')) {
+        // Səhifədəki "1,05" yazısını tapıb "1.049,00" ilə əvəz edirik
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            if (el.children.length === 0 && (el.innerText.trim() === '1,05' || el.innerText.trim() === '1.05')) {
+                el.innerText = '1.049,00';
+            }
+        });
+    }
+});

