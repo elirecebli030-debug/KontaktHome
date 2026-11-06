@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BLOK3 - Bilet Al</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f8f9fa; overflow: hidden; }
+        
+        /* Yuxarı hissə */
+        .header { position: fixed; top: 0; width: 100%; background: #fff; padding: 15px 20px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 18px; color: #333; }
+        .header .close-btn { font-size: 24px; color: #999; cursor: pointer; }
+        
+        /* Qiymət filtrləri */
+        .price-filters { position: fixed; top: 65px; width: 100%; background: #fff; padding: 10px 15px; z-index: 99; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #eee; }
+        .price-filters::-webkit-scrollbar { display: none; }
+        .price-chip { padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid #ddd; color: #555; background: #fff; }
+        .price-chip.active { background: #6a1b9a; color: #fff; border-color: #6a1b9a; }
+        
+        /* Xəritə sahəsi */
+        .map-container { position: absolute; top: 120px; bottom: 80px; width: 100%; overflow: auto; background: #eef0f2; display: flex; justify-content: center; align-items: flex-start; padding: 20px; }
+        .map-wrapper { position: relative; width: 800px; height: 1000px; background: #eef0f2; transition: transform 0.1s; transform-origin: top center; }
+        
+        /* Səhnə və Zonalar */
+        .stage { position: absolute; top: 50px; left: 250px; width: 300px; height: 60px; background: #ddd; border-radius: 10px 10px 0 0; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-weight: bold; font-size: 14px; letter-spacing: 1px; }
+        .stage span { font-size: 10px; font-weight: normal; }
+        
+        .golden-circle { position: absolute; top: 130px; left: 150px; width: 500px; height: 200px; background: #e2b07a; border-radius: 10px; display: flex; justify-content: space-around; align-items: center; color: #fff; font-weight: bold; text-align: center; }
+        .golden-circle span { font-size: 11px; font-weight: normal; display: block; margin-top: 5px; }
+        
+        .fan-zone { position: absolute; top: 350px; left: 100px; width: 600px; height: 300px; background: #29b6f6; border-radius: 20px; display: flex; justify-content: center; align-items: center; color: #fff; font-weight: bold; text-align: center; font-size: 20px; }
+        .fan-zone span { font-size: 12px; font-weight: normal; display: block; margin-top: 5px; }
+        
+        /* Tribuna (Oturacaqlar) */
+        .tribune-left { position: absolute; top: 130px; left: 20px; width: 100px; height: 520px; display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; background: #fff; border-radius: 10px; }
+        .tribune-right { position: absolute; top: 130px; right: 20px; width: 100px; height: 520px; display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; background: #fff; border-radius: 10px; }
+        .tribune-bottom { position: absolute; bottom: 50px; left: 150px; width: 500px; height: 150px; display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; background: #fff; border-radius: 10px; justify-content: center; }
+        
+        .seat { width: 12px; height: 12px; border-radius: 50%; background: #ccc; cursor: pointer; transition: 0.2s; }
+        .seat.available { background: #fff; border: 1px solid #bbb; }
+        .seat.selected { background: #e91e63; border-color: #e91e63; transform: scale(1.2); }
+        .seat.occupied { background: #ccc; cursor: not-allowed; opacity: 0.6; }
+        
+        /* Alt hissə */
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .info { font-size: 14px; color: #555; }
+        .info b { display: block; font-size: 18px; color: #333; }
+        .info span { font-size: 12px; color: #888; }
+        .btn-continue { background: #ffdd00; color: #333; border: none; padding: 12px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        /* Zoom düymələri */
+        .zoom-controls { position: fixed; right: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+        .zoom-btn { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: bold; color: #555; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Yuxarı hissə -->
+    <div class="header">
+        <div>
+            <h1>BLOK3</h1>
+            <div style="font-size: 12px; color: #888;">7 noy 20:00 • Baku Crystal Hall</div>
+        </div>
+        <div class="close-btn" onclick="window.location.href='azericard-3ds.html'">&times;</div>
+    </div>
+
+    <!-- Qiymət filtrləri -->
+    <div class="price-filters">
+        <div class="price-chip">50 ₼</div>
+        <div class="price-chip">60 ₼</div>
+        <div class="price-chip">65 ₼</div>
+        <div class="price-chip">70 ₼</div>
+        <div class="price-chip active">80 ₼</div>
+        <div class="price-chip">90 ₼</div>
+        <div class="price-chip">100 ₼</div>
+    </div>
+
+    <!-- Zoom düymələri -->
+    <div class="zoom-controls">
+        <div class="zoom-btn" onclick="zoomIn()">+</div>
+        <div class="zoom-btn" onclick="zoomOut()">-</div>
+    </div>
+
+    <!-- Xəritə sahəsi -->
+    <div class="map-container" id="mapContainer">
+        <div class="map-wrapper" id="mapWrapper">
+            
+            <!-- Səhnə -->
+            <div class="stage">STAGE<br><span>SƏHNƏ</span></div>
+            
+            <!-- Zonalar -->
+            <div class="golden-circle">
+                <div>GOLDEN CIRCLE<br><span>Ayaqüstü Zona</span></div>
+                <div>GOLDEN CIRCLE<br><span>Ayaqüstü Zona</span></div>
+            </div>
+            
+            <div class="fan-zone">FAN ZONE<br><span>Ayaqüstü Zona</span></div>
+            
+            <!-- Tribuna (Oturacaqlar) -->
+            <div class="tribune-left" id="tribuneLeft"></div>
+            <div class="tribune-right" id="tribuneRight"></div>
+            <div class="tribune-bottom" id="tribuneBottom"></div>
+
+        </div>
+    </div>
+
+    <!-- Alt hissə -->
+    <div class="bottom-bar">
+        <div class="info">
+            Seçilmiş: <b id="selected-count">0</b>
+            <span>Oturacaq</span>
+        </div>
+        <div class="info" style="text-align: right;">
+            Məbləğ: <b id="total-price">0 ₼</b>
+        </div>
+        <button class="btn-continue" onclick="goToCheckout()">Davam et</button>
+    </div>
+
+    <script>
+        const seatPrice = 80; // Qiymət
+        let selectedSeats = 0;
+        let currentZoom = 1;
+
+        // Oturacaqların yaradılması funksiyası
+        function createSeats(containerId, count) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < count; i++) {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                
+                // Random olaraq bəzilərini dolu edirik (50% ehtimal)
+                if (Math.random() > 0.5) {
+                    seat.classList.add('occupied');
+                } else {
+                    seat.classList.add('available');
+                    seat.onclick = function() {
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedSeats--;
+                        } else {
+                            this.classList.add('selected');
+                            selectedSeats++;
+                        }
+                        updateTotal();
+                    };
+                }
+                container.appendChild(seat);
+            }
+        }
+
+        // Oturacaqları yaradırıq (sol, sağ, alt)
+        createSeats('tribuneLeft', 60);
+        createSeats('tribuneRight', 60);
+        createSeats('tribuneBottom', 100);
+
+        // Qiyməti yeniləyirik
+        function updateTotal() {
+            document.getElementById('selected-count').innerText = selectedSeats;
+            document.getElementById('total-price').innerText = (selectedSeats * seatPrice) + ' ₼';
+        }
+
+        // Zoom funksiyaları
+        function zoomIn() {
+            if (currentZoom < 2.5) {
+                currentZoom += 0.2;
+                document.getElementById('mapWrapper').style.transform = `scale(${currentZoom})`;
+            }
+        }
+
+        function zoomOut() {
+            if (currentZoom > 0.6) {
+                currentZoom -= 0.2;
+                document.getElementById('mapWrapper').style.transform = `scale(${currentZoom})`;
+            }
+        }
+
+        // Davam et düyməsi
+        function goToCheckout() {
+            if (selectedSeats === 0) {
+                alert('Zəhmət olmasa ən azı bir oturacaq seçin!');
+                return;
+            }
+            // Seçilmiş oturacaqların sayını və məbləği karta ötürürük
+            const totalAmount = selectedSeats * seatPrice;
+            window.location.href = `azericard-3ds.html?amount=${totalAmount}&seats=${selectedSeats}`;
+        }
+    </script>
+</body>
+</html>
